@@ -11,7 +11,7 @@ ALTO = 480
 
 pygame.init()
 screen = pygame.display.set_mode((ANCHO, ALTO))
-pygame.display.set_caption("TESTING PURPOSES")
+pygame.display.set_caption("TESTS")
 
 
 while True:
