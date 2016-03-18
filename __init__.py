@@ -8,12 +8,13 @@ ALTO = 480
 # CONSTANTES
 
 # PROGRAMA PRINCIPAL
+def main():
+    pygame.init()
+    pygame.display.set_mode((ANCHO, ALTO))
+    pygame.display.set_caption("TESTS")
 
-pygame.init()
-screen = pygame.display.set_mode((ANCHO, ALTO))
-pygame.display.set_caption("TESTS")
-print "Hola"
-print "Adios"
+    while True:
+        pygame.display.flip()
 
-while True:
-    pygame.display.flip()
+if __name__ == '__main__':
+    main()
