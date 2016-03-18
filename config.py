@@ -16,6 +16,12 @@ class Config:
     def getWindowALTO(self):
         return self.WindowALTO
 
+def write_config():
+    """
+    Returns: nothing
+    """
+    with open("config.cfg","w") as archivo:
+        archivo.write("# Game config file\n\n# Lines starting with \"#\" are comments\n# and will not be read by the game.\n\n# Whether to show FPS on screen or not\n# 1=yes; 0=no\nShowFPS=1\n\n# Resolution of the screen, in pixels\nWindowHEIGHT=480\nWindowWIDTH=640".encode("utf-8"))
 def load_config(path):
     """
     Arguments:
@@ -43,5 +49,6 @@ def load_config(path):
         return config
     except IOError as exc:
         print "An error has occurred: " , exc
-        print "Using default config..."
+        print "Writing cfg file again..."
+        write_config()
         return config
