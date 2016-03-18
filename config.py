@@ -1,5 +1,3 @@
-from pip._vendor.distlib.util import ARCHIVE_EXTENSIONS
-
 class Config:
     def __init__(self):
         self.showFPS = True
@@ -30,12 +28,15 @@ def load_config(path):
         with open(path, "r") as archivo:
             for linea in archivo.readlines():
                 linea = linea.decode("utf-8")
+                linea = linea.rstrip("\n")
+                print "[Parser] Reading cfg line '" + linea.encode("utf-8") + "'"
+                if linea == "": continue
                 if linea[0] == "#": continue
                 linearr = linea.split("=")
                 if linearr[0] == "ShowFPS" and linearr[1] == "1": config.setShowFPS(True)
                 elif linearr[0] == "ShowFPS" and linearr[1] == "0": config.setShowFPS(False)
-                elif linearr[0] == "WindowHEIGHT": config.setWINDOWALTO(int(linearr[1]))
-                elif linearr[0] == "WindowWIDTH": config.setWINDOWANCHO(int(linearr[1]))
+                elif linearr[0] == "WindowHEIGHT": config.setWindowALTO(int(linearr[1]))
+                elif linearr[0] == "WindowWIDTH": config.setWindowANCHO(int(linearr[1]))
                 else: 
                     print "[WARNING] Invalid .cfg file, using default config."
                     return config
