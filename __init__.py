@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import pygame, math, time, os
+=======
+import pygame, math, time, os
+>>>>>>> add-imports
 from pygame.locals import *
 
 
@@ -12,7 +16,7 @@ ALTO = 480
 pygame.init()
 screen = pygame.display.set_mode((ANCHO, ALTO))
 pygame.display.set_caption("TESTS")
-
+print "Hola"
 
 while True:
     pygame.display.flip()
