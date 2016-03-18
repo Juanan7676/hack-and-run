@@ -17,6 +17,7 @@ pygame.init()
 screen = pygame.display.set_mode((ANCHO, ALTO))
 pygame.display.set_caption("TESTS")
 print "Hola"
+print "Adios"
 
 while True:
     pygame.display.flip()
