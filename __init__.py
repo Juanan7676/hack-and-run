@@ -1,6 +1,7 @@
-import pygame, math, time, os, config
+import pygame, math, time, os, config, menu
 from pygame.locals import *
 from config import *
+from menu import *
 
 # CONSTANTES
 ANCHO = None
@@ -18,9 +19,11 @@ def main():
     ticked = 0
     ticks_before = pygame.time.get_ticks()
     ticks_after = pygame.time.get_ticks()
+    fuente_menu = pygame.font.SysFont("Calibri", 40)
     fps = 60
     while True:
         screen.fill((0,0,0))
+        pintar_menu(screen,fuente_menu,configuracion)
         if configuracion.getShowFPS():
             if (ticks_after - ticks_before > 1000):
                 fps = ticked / ((ticks_after - ticks_before) / 1000)
