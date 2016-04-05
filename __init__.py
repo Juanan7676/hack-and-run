@@ -1,9 +1,11 @@
-import pygame, math, time, os, config, menu, util, render_engine, sys
+import pygame, math, time, os, config, menu, util, render_engine, sys, threading, input_thread
 from pygame.locals import *
 from config import *
 from menu import *
 from util import *
 from render_engine import *
+from threading import Thread
+from input_thread import *
 # CONSTANTES
 ANCHO = None
 ALTO = None
@@ -23,10 +25,14 @@ def main():
     ticks_before = pygame.time.get_ticks()
     ticks_after = pygame.time.get_ticks()
     fps = 60
+    controles = Thread(target=controls, args=(JUEGO, ))
+    controles.daemon = True
+    controles.start()
     while True:
         screen.fill((0,0,0))
         for eventos in pygame.event.get():
             if eventos.type == QUIT:
+                JUEGO.estado = "ERROR"
                 sys.exit(0)
         for obj in get_objects(JUEGO):
             screen.blit(obj.get_assoc() , obj.get_rect())

@@ -1,7 +1,7 @@
 # coding:utf-8
-import util
-from util import load_image
+
 from Juego.menu import pintar_menu
+from Juego.input_thread import current_selection
 
 class Game:
     def __init__(self):
@@ -20,5 +20,7 @@ class Game:
 def get_objects(juego):
     if juego.estado == "INICIO": return [] # TODO: Print loading
     elif juego.estado == "MENU":
-        return pintar_menu(juego.config)
+        return pintar_menu(juego.config, current_selection)
+    elif juego.estado == "ERROR":
+        return [] # TODO: BSoD
     else: return []
