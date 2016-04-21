@@ -12,6 +12,7 @@ ALTO = None
 # CONSTANTES
 
 # PROGRAMA PRINCIPAL
+
 def main():
     JUEGO = Game()
     configuracion = load_config("config.cfg")
@@ -25,9 +26,9 @@ def main():
     ticks_before = pygame.time.get_ticks()
     ticks_after = pygame.time.get_ticks()
     fps = 60
-    controles = Thread(target=controls, args=(JUEGO, ))
-    controles.daemon = True
-    controles.start()
+    xdd = Thread(target = controls, args= (JUEGO, ))
+    xdd.daemon = True
+    xdd.start()
     while True:
         screen.fill((0,0,0))
         for eventos in pygame.event.get():

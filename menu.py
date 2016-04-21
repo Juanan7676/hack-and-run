@@ -6,7 +6,6 @@ def pintar_menu(config, seleccionado):
     obj = []
     seleccion = load_image("images/flecha.png",True)
     pintable4 = Pintable(seleccion, seleccion.get_rect())
-    
     fuente = pygame.font.SysFont("Calibri", 40)
     ancho = config.getWindowANCHO()
     alto = config.getWindowALTO()

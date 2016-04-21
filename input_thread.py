@@ -1,13 +1,12 @@
-import pygame
+import pygame, time
 from pygame.locals import K_UP, K_DOWN
-
-current_selection = 0
 
 def controls(game):
     while game.estado != "ERROR":
-        pygame.time.delay(1)
+        pygame.time.wait(100)
         pressed = pygame.key.get_pressed()
         if game.estado == "MENU":
-            global current_selection
-            if pressed[K_UP] and current_selection > 1: current_selection -= 1
-            elif pressed[K_DOWN] and current_selection < 3: current_selection += 1
+            if pressed[K_UP] and game.get_menu_selected() > 1: 
+                game.set_menu_selected(game.get_menu_selected() - 1)
+            elif pressed[K_DOWN] and game.get_menu_selected() < 3: 
+                game.set_menu_selected(game.get_menu_selected() + 1)
