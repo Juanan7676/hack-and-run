@@ -7,7 +7,7 @@ class Game:
         """
         Instanciar esta clase sólo UNA VEZ, al principio del programa.
         """
-        self.estado = "INICIO" # Estados posibles: INICIO, ERROR, MENU, PARTIDA
+        self.estado = "INICIO" # Estados posibles: INICIO, ERROR, MENU, PARTIDA, OPCIONES
         self.seleccionado = 0
     def complete_init(self, config):
         """

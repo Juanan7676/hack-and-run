@@ -29,12 +29,14 @@ def main():
     xdd = Thread(target = controls, args= (JUEGO, ))
     xdd.daemon = True
     xdd.start()
+    fondo = load_image("images/background.jpg")
     while True:
-        screen.fill((0,0,0))
+        screen.blit(fondo, (-55,0))
         for eventos in pygame.event.get():
             if eventos.type == QUIT:
                 JUEGO.estado = "ERROR"
                 sys.exit(0)
+        if JUEGO.estado == "ERROR": sys.exit(0)
         for obj in get_objects(JUEGO):
             screen.blit(obj.get_assoc() , obj.get_rect())
         if configuracion.getShowFPS():

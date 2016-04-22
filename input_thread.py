@@ -1,5 +1,5 @@
-import pygame, time
-from pygame.locals import K_UP, K_DOWN
+import pygame
+from pygame.locals import K_UP, K_DOWN, K_RETURN
 
 def controls(game):
     while game.estado != "ERROR":
@@ -10,3 +10,7 @@ def controls(game):
                 game.set_menu_selected(game.get_menu_selected() - 1)
             elif pressed[K_DOWN] and game.get_menu_selected() < 3: 
                 game.set_menu_selected(game.get_menu_selected() + 1)
+            elif pressed[K_RETURN] and game.get_menu_selected() != 0:
+                if game.get_menu_selected() == 3: game.estado = "ERROR"
+                elif game.get_menu_selected() == 2: game.estado = "OPTIONS"
+                elif game.get_menu_selected() == 1: game.estado = "PARTIDA"
