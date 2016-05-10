@@ -1,6 +1,6 @@
 # coding:utf-8
 
-from Juego.menu import pintar_menu
+from Juego.menu import *
 
 class Game:
     def __init__(self):
@@ -21,10 +21,12 @@ class Game:
     def get_menu_selected(self):
         return self.seleccionado
 
-def get_objects(juego):
+def get_objects(juego, seleccion):
     if juego.estado == "INICIO": return [] # TODO: Print loading
     elif juego.estado == "MENU":
-        return pintar_menu(juego.config, juego.get_menu_selected())
+        return pintar_menu(juego.config, juego.get_menu_selected(), seleccion)
     elif juego.estado == "ERROR":
         return [] # TODO: BSoD
+    elif juego.estado == "OPCIONES":
+        return pintar_opciones(juego.config, seleccion)
     else: return []

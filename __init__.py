@@ -28,16 +28,19 @@ def main():
     fps = 60
     xdd = Thread(target = controls, args= (JUEGO, ))
     xdd.daemon = True
-    xdd.start()
+    #xdd.start()
     fondo = load_image("images/background.jpg")
+    seleccion = load_image("images/flecha.png",True)
     while True:
         screen.blit(fondo, (-55,0))
         for eventos in pygame.event.get():
             if eventos.type == QUIT:
                 JUEGO.estado = "ERROR"
                 sys.exit(0)
+            elif eventos.type == KEYDOWN:
+                controls(JUEGO)
         if JUEGO.estado == "ERROR": sys.exit(0)
-        for obj in get_objects(JUEGO):
+        for obj in get_objects(JUEGO, seleccion):
             screen.blit(obj.get_assoc() , obj.get_rect())
         if configuracion.getShowFPS():
             if (ticks_after - ticks_before > 1000):
