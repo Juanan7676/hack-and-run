@@ -12,3 +12,5 @@ def controls(game):
             if game.get_menu_selected() == 3: game.estado = "ERROR"
             elif game.get_menu_selected() == 2: game.estado = "OPTIONS"
             elif game.get_menu_selected() == 1: game.estado = "PARTIDA"
+    if game.estado == "PARTIDA":
+        pass
