@@ -1,5 +1,5 @@
 # coding:utf-8
-
+import math
 from Juego.menu import *
 from util import load_image
 from game_engine import *
@@ -18,12 +18,15 @@ class MovingEntity:
         self.acceleration = [0.0,0.0]
         self.pintable = img
         
-    def simulate_pos(self):
-        self.velocity[0] += self.acceleration[0]
-        self.velocity[1] += self.acceleration[1]
-        self.coords[0] += self.velocity[0]
-        self.coords[1] += self.velocity[1]
-        
+    def simulate_pos(self, deltat, juego):
+        self.velocity[0] += self.acceleration[0] * deltat
+        self.velocity[1] += self.acceleration[1] * deltat
+        self.coords[0] += self.velocity[0] * deltat
+        self.coords[1] += self.velocity[1] * deltat
+        if self.coords[1] < 0.0: 
+            self.acceleration[1] = 0.0
+            self.coords[1] = 0.0
+        self.pintable.rect.bottom = -self.coords[1] * 30 + juego.config.getWindowALTO() - 20
     def update_pos(self, newpos):
         self.coords = newpos
         
@@ -38,12 +41,50 @@ class MovingEntity:
     
 class Player(MovingEntity):
     def __init__(self, initialcoords, initialimg, initialhealth, name, score):
-        super(Player, self).__init__(initialcoords, initialimg)
+        MovingEntity.__init__(self, initialcoords, initialimg)
         self.health = initialhealth
         self.name = name
         self.score = score
-    
+        self.status = "STILL"
+        self.timeelapsed = 0 # Variable para guardar tiempos al andar
+    def perform_jump(self):
+        if self.coords[1] > 0.0: return
+        self.velocity = [self.velocity[0], 5.0]
+        self.acceleration = [self.acceleration[0], -9.8]
         
+    def walk(self, deltat, direction, juego):
+        """
+        Direccion: FALSE Izquierda, TRUE Derecha
+        """
+        self.timeelapsed += deltat
+        if self.timeelapsed >= 100:
+            self.timeelapsed = 0
+            if direction:
+                if self.status == "STILL" or self.status == "R_3":
+                    self.status = "R_0"
+                    self.pintable = Pintable(juego.character["Walking_still"], juego.player.get_pintable().rect)
+                elif self.status == "R_0":
+                    self.status = "R_1"
+                    self.pintable = Pintable(juego.character["Walking_1"], juego.player.get_pintable().rect)
+                elif self.status == "R_1":
+                    self.status = "R_2"
+                    self.pintable = Pintable(juego.character["Walking_still"], juego.player.get_pintable().rect)
+                elif self.status == "R_2":
+                    self.status = "R_3"
+                    self.pintable = Pintable(juego.character["Walking_2"], juego.player.get_pintable().rect)
+            else:
+                if self.status == "STILL" or self.status == "R_3":
+                    self.status = "R_0"
+                    self.pintable = Pintable(juego.character["Walking_still_L"], juego.player.get_pintable().rect)
+                elif self.status == "R_0":
+                    self.status = "R_1"
+                    self.pintable = Pintable(juego.character["Walking_1_L"], juego.player.get_pintable().rect)
+                elif self.status == "R_1":
+                    self.status = "R_2"
+                    self.pintable = Pintable(juego.character["Walking_still_L"], juego.player.get_pintable().rect)
+                elif self.status == "R_2":
+                    self.status = "R_3"
+                    self.pintable = Pintable(juego.character["Walking_2_L"], juego.player.get_pintable().rect)
 class Game:
     def __init__(self):
         """
@@ -54,18 +95,24 @@ class Game:
         self.character = {}
         self.character["Still_front"] = load_image("images/still1-new.png", True)
         self.character["Still_back"] = load_image("images/still2-new.png", True)
-        self.character["Walking_still"] = load_image("images/2.png", True)
-        self.character["Walking_1"] = load_image("images/1.png", True)
-        self.character["Walking_2"] = load_image("images/3.png", True)
+        self.character["Walking_still"] = load_image("images/walking-D-3.png", True)
+        self.character["Walking_1"] = load_image("images/walking-D-1.png", True)
+        self.character["Walking_2"] = load_image("images/walking-D-2.png", True)
+        self.character["Walking_still_L"] = load_image("images/walking-I-3.png", True)
+        self.character["Walking_1_L"] = load_image("images/walking-I-1.png", True)
+        self.character["Walking_2_L"] = load_image("images/walking-I-2.png", True)
         self.suelo = load_image("images/suelo.png")
         self.game_background = load_image("images/background3.png")
-        
+        self.player = Player([0.0,0.0], Pintable(self.character["Still_front"], self.character["Still_front"].get_rect()), 100.0, "Juanan76", 0)
+        self.farola = load_image("images/farola2.png", True)
     def complete_init(self, config):
         """
         Llamar cuando se ha completado el arranque y empezar a renderizar el menú.
         """
         self.config = config
         self.estado = "MENU"
+        self.player.get_pintable().rect.centerx = self.config.getWindowANCHO() / 2
+        self.player.get_pintable().rect.bottom = self.config.getWindowALTO() - 25
     def set_menu_selected(self, selection):
         if self.estado != "MENU": return False
         else: self.seleccionado = selection

@@ -6,6 +6,7 @@ from util import *
 from render_engine import *
 from threading import Thread
 from input_thread import *
+from game_engine import game_loop
 # CONSTANTES
 ANCHO = None
 ALTO = None
@@ -26,14 +27,13 @@ def main():
     ticks_before = pygame.time.get_ticks()
     ticks_after = pygame.time.get_ticks()
     fps = 60
-    xdd = Thread(target = controls, args= (JUEGO, ))
+    xdd = Thread(target = game_loop, args= (JUEGO, ))
     xdd.daemon = True
     logo = load_image("images/logo.png", True)
-    #xdd.start()
+    xdd.start()
     fondo = load_image("images/background.jpg")
     seleccion = load_image("images/flecha.png",True)
     while True:
-        
         if JUEGO.estado == "MENU": screen.blit(fondo, (-55,0))
         else: screen.fill((0,0,0))
         for eventos in pygame.event.get():

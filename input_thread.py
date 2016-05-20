@@ -13,4 +13,4 @@ def controls(game):
             elif game.get_menu_selected() == 2: game.estado = "OPTIONS"
             elif game.get_menu_selected() == 1: game.estado = "PARTIDA"
     if game.estado == "PARTIDA":
-        pass
+        return pygame.key.get_pressed()
