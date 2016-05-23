@@ -1,6 +1,5 @@
 import pygame
 from pygame.locals import RLEACCEL
-
 class Pintable():
     def __init__(self, surf, rect):
         self.assoc = surf

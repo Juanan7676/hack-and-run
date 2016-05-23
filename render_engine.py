@@ -1,8 +1,18 @@
 # coding:utf-8
 import math
 from Juego.menu import *
-from util import load_image
 from game_engine import *
+
+
+def generate_map(juego):
+    obj = []
+    # Phase 1: floor
+    for k in range(-1000, 1000):
+        for j in range(0,2):
+            obj.append(MovingEntity([k, j - 1.83], Pintable(juego.suelo, juego.suelo.get_rect())))
+    for k in range(-1000,1000,10):
+            obj.append(MovingEntity([k,0], Pintable(juego.farola, juego.farola.get_rect())))
+    return obj
 
 class MovingEntity:
     def __init__(self, coords, img):
@@ -105,6 +115,10 @@ class Game:
         self.game_background = load_image("images/background3.png")
         self.player = Player([0.0,0.0], Pintable(self.character["Still_front"], self.character["Still_front"].get_rect()), 100.0, "Juanan76", 0)
         self.farola = load_image("images/farola2.png", True)
+        self.entities = generate_map(self)
+        #self.entities.append(MovingEntity([-10.0,0], Pintable(self.farola, self.farola.get_rect())))
+        #self.entities.append(MovingEntity([-20.0,0], Pintable(self.farola, self.farola.get_rect())))
+
     def complete_init(self, config):
         """
         Llamar cuando se ha completado el arranque y empezar a renderizar el menú.
@@ -113,9 +127,11 @@ class Game:
         self.estado = "MENU"
         self.player.get_pintable().rect.centerx = self.config.getWindowANCHO() / 2
         self.player.get_pintable().rect.bottom = self.config.getWindowALTO() - 25
+
     def set_menu_selected(self, selection):
         if self.estado != "MENU": return False
         else: self.seleccionado = selection
+
     def get_menu_selected(self):
         return self.seleccionado
 
