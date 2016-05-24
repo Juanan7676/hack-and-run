@@ -16,10 +16,16 @@ def generate_map(juego):
     while k < 1000:
         k += randint(15,45)
         obj.append(MovingEntity([k, -1.5], Pintable(juego.casa, juego.casa.get_rect())))
-    # Phase 3: lights
     
+    # Phase 3: lights
     for k in range(-1000,1000,10):
-            obj.append(MovingEntity([k,0], Pintable(juego.farola, juego.farola.get_rect())))
+            correct = True
+            for xD in obj:
+                if xD.pintable.assoc != juego.casa: continue
+                if abs(xD.coords[0] - k) < 5.0:
+                    correct = False
+                    break
+            if correct: obj.append(MovingEntity([k,0], Pintable(juego.farola, juego.farola.get_rect())))
     return obj
 
 class MovingEntity:
