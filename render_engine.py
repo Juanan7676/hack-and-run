@@ -1,8 +1,8 @@
 # coding:utf-8
-import math
-from Juego.menu import *
-from game_engine import *
-
+from util import Pintable, load_image
+from menu import pintar_menu, pintar_opciones
+from game_engine import paint_game
+from random import randint
 
 def generate_map(juego):
     obj = []
@@ -10,6 +10,14 @@ def generate_map(juego):
     for k in range(-1000, 1000):
         for j in range(0,2):
             obj.append(MovingEntity([k, j - 1.83], Pintable(juego.suelo, juego.suelo.get_rect())))
+    
+    # Phase 2: houses
+    k = -1000
+    while k < 1000:
+        k += randint(15,45)
+        obj.append(MovingEntity([k, -1.5], Pintable(juego.casa, juego.casa.get_rect())))
+    # Phase 3: lights
+    
     for k in range(-1000,1000,10):
             obj.append(MovingEntity([k,0], Pintable(juego.farola, juego.farola.get_rect())))
     return obj
@@ -33,7 +41,7 @@ class MovingEntity:
         self.velocity[1] += self.acceleration[1] * deltat
         self.coords[0] += self.velocity[0] * deltat
         self.coords[1] += self.velocity[1] * deltat
-        if self.coords[1] < 0.0: 
+        if self.coords[1] <= 0.0: 
             self.acceleration[1] = 0.0
             self.coords[1] = 0.0
         self.pintable.rect.bottom = -self.coords[1] * 30 + juego.config.getWindowALTO() - 20
@@ -60,7 +68,7 @@ class Player(MovingEntity):
     def perform_jump(self):
         if self.coords[1] > 0.0: return
         self.velocity = [self.velocity[0], 5.0]
-        self.acceleration = [self.acceleration[0], -9.8]
+        self.acceleration = [self.acceleration[0], -15.0]
         
     def walk(self, deltat, direction, juego):
         """
@@ -115,6 +123,7 @@ class Game:
         self.game_background = load_image("images/background3.png")
         self.player = Player([0.0,0.0], Pintable(self.character["Still_front"], self.character["Still_front"].get_rect()), 100.0, "Juanan76", 0)
         self.farola = load_image("images/farola2.png", True)
+        self.casa = load_image("images/casote.png", True)
         self.entities = generate_map(self)
         #self.entities.append(MovingEntity([-10.0,0], Pintable(self.farola, self.farola.get_rect())))
         #self.entities.append(MovingEntity([-20.0,0], Pintable(self.farola, self.farola.get_rect())))

@@ -1,5 +1,5 @@
-import util, pygame
-from util import Pintable, load_image
+import pygame
+from util import Pintable#, load_image
 
 def pintar_menu(config, seleccionado, seleccion, logo):
     obj = []
@@ -37,6 +37,6 @@ def pintar_menu(config, seleccionado, seleccion, logo):
 
 def pintar_opciones(config, seleccionado):
     objetos = []
-    seleccion = load_image("images/flecha.png",True)
+    #seleccion = load_image("images/flecha.png",True)
     
     return objetos

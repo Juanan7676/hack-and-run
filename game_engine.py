@@ -20,8 +20,9 @@ def paint_game(juego):
         tmp = entity.pintable
         coords = entity.coords
         centercoords = juego.player.coords
-        diff = [coords[0] - centercoords[0], coords[1] - centercoords[1]]
-        tmp.rect.centerx = juego.player.pintable.rect.centerx + diff[0] * 30
+        diff = coords[0] - centercoords[0]
+        tmp.rect.centerx = juego.player.pintable.rect.centerx + diff * 30
+        if tmp.rect.right < 0 or tmp.rect.left > juego.config.getWindowANCHO(): continue
         tmp.rect.bottom = juego.config.getWindowALTO() - entity.coords[1] * 30 - 55
         obj.append(tmp)
     obj.append(juego.player.get_pintable())
@@ -40,7 +41,7 @@ def game_loop(juego):
         elif controles[K_LEFT]:
             juego.player.update_velocity([-3.0, juego.player.velocity[1]])
             juego.player.walk(deltat, False, juego)
-        elif controles[K_UP] and juego.player.coords[1] == 0.0:
+        elif controles[K_UP] and juego.player.coords[1] <= 0.0:
             juego.player.perform_jump()
         else:
             if juego.player.coords[1] == 0.0: juego.player.update_velocity([0.0, 0.0])
