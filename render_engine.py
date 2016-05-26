@@ -1,8 +1,10 @@
 # coding:utf-8
+import pong_minigame
 from util import Pintable, load_image
 from menu import pintar_menu, pintar_opciones
 from game_engine import paint_game
 from random import randint
+from Juego.pong_minigame import Pong_context
 
 def generate_map(juego):
     obj = []
@@ -15,7 +17,7 @@ def generate_map(juego):
     k = -1000
     while k < 1000:
         k += randint(15,45)
-        obj.append(MovingEntity([k, -1.5], Pintable(juego.casa, juego.casa.get_rect())))
+        obj.append(MovingEntity([k, 0.0], Pintable(juego.casa2, juego.casa2.get_rect())))
     
     # Phase 3: lights
     for k in range(-1000,1000,10):
@@ -115,6 +117,7 @@ class Game:
         Instanciar esta clase sólo UNA VEZ, al principio del programa.
         """
         self.estado = "INICIO" # Estados posibles: INICIO, ERROR, MENU, PARTIDA, OPCIONES
+        self.minijuego = ""
         self.seleccionado = 0
         self.character = {}
         self.character["Still_front"] = load_image("images/still1-new.png", True)
@@ -128,11 +131,10 @@ class Game:
         self.suelo = load_image("images/suelo.png")
         self.game_background = load_image("images/background3.png")
         self.player = Player([0.0,0.0], Pintable(self.character["Still_front"], self.character["Still_front"].get_rect()), 100.0, "Juanan76", 0)
-        self.farola = load_image("images/farola2.png", True)
+        self.farola = load_image("images/farola3.png", True)
         self.casa = load_image("images/casote.png", True)
+        self.casa2 = load_image("images/casa1.png", True)
         self.entities = generate_map(self)
-        #self.entities.append(MovingEntity([-10.0,0], Pintable(self.farola, self.farola.get_rect())))
-        #self.entities.append(MovingEntity([-20.0,0], Pintable(self.farola, self.farola.get_rect())))
 
     def complete_init(self, config):
         """
@@ -142,7 +144,7 @@ class Game:
         self.estado = "MENU"
         self.player.get_pintable().rect.centerx = self.config.getWindowANCHO() / 2
         self.player.get_pintable().rect.bottom = self.config.getWindowALTO() - 25
-
+        self.current_context = Pong_context(self)
     def set_menu_selected(self, selection):
         if self.estado != "MENU": return False
         else: self.seleccionado = selection
@@ -160,4 +162,6 @@ def get_objects(juego, seleccion, logo):
         return pintar_opciones(juego.config, seleccion)
     elif juego.estado == "PARTIDA":
         return paint_game(juego)
+    elif juego.estado == "MINIJUEGO":
+        return juego.current_context.obj
     else: return []

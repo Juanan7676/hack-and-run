@@ -35,6 +35,7 @@ def main():
     seleccion = load_image("images/flecha.png",True)
     while True:
         if JUEGO.estado == "MENU": screen.blit(fondo, (-55,0))
+        if JUEGO.estado == "MINIJUEGO": continue
         else: screen.fill((0,0,0))
         for eventos in pygame.event.get():
             if eventos.type == QUIT:
