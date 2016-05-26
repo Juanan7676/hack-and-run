@@ -1,7 +1,7 @@
-import pygame
+import pygame, pong_minigame
 from util import Pintable
 from input_thread import controls
-from pygame.locals import K_RIGHT, K_LEFT, K_UP
+from pygame.locals import K_RIGHT, K_LEFT, K_UP, K_q
 def paint_game(juego):
     # 1: Character
     obj = []
@@ -32,8 +32,10 @@ def game_loop(juego):
     while True:
         pygame.time.delay(25)
         if juego.estado != "PARTIDA": continue
-        print juego.player.coords
         deltat = 25
+        if juego.estado == "MINIJUEGO":
+            juego.current_context.update_deltat(deltat)
+            pong_minigame.start_pong(juego.current_context)
         controles = controls(juego)
         if controles[K_RIGHT]:
             juego.player.update_velocity([3.0, juego.player.velocity[1]])
@@ -43,6 +45,15 @@ def game_loop(juego):
             juego.player.walk(deltat, False, juego)
         elif controles[K_UP] and juego.player.coords[1] <= 0.0:
             juego.player.perform_jump()
+        elif controles[K_q] and juego.player.velocity == [0.0, 0.0]:
+            for ent in juego.entities:
+                if ent.pintable.assoc != juego.casa2: continue
+                diff = [abs(ent.coords[0] - juego.player.coords[0]), abs(ent.coords[0] - juego.player.coords[0])]
+                if diff[0] < 1.0 and diff[1] < 1.0:
+                    juego.estado = "MINIJUEGO"
+                    juego.minijuego = "PONG"
+                    print "HAY MAN"
+                    break
         else:
             if juego.player.coords[1] == 0.0: juego.player.update_velocity([0.0, 0.0])
             juego.player.pintable = Pintable(juego.character["Still_front"], juego.player.get_pintable().rect)
